@@ -1,4 +1,4 @@
-Day 09 – Linux User & Group Management Challenge
+**Day 09 – Linux User & Group Management Challenge**
 
 Task
 Today's goal is to practice user and group management by completing hands-on challenges.

@@ -1,161 +1,220 @@
-Day 11 – File Ownership Challenge
+# Day 11 – File Ownership Challenge
 
-Objective
+## Objective
 
 Today I practiced Linux file and directory ownership using:
 
+- `ls -l`
+- `chown`
+- `chgrp`
+- `chown user:group`
+- `chown -R`
+
+---
+
+## Task 1: Understanding Ownership
+
+### Command Used
+
+```bash
 ls -l
+```
 
-chown
+### Example Output
 
-chgrp
-
-chown user:group
-
-chown -R
-
-Task 1: Understanding Ownership
-
-Command Used
-
-ls -l
-
-Example Output
-
+```text
 -rw-r--r-- 1 root root 0 devops-file.txt
+```
 
-Understanding the Output
+### Understanding the Output
 
-First root = File owner
+In:
 
-Second root = Group owner
+```text
+-rw-r--r-- 1 root root 0 devops-file.txt
+```
 
-Owner vs Group
+- First `root` = File owner
+- Second `root` = Group owner
 
-Owner:
-The user who owns the file or directory. Ownership can be changed using chown.
+### Owner vs Group
 
-Group:
+**Owner:**  
+The user who owns the file or directory. Ownership can be changed using `chown`.
+
+**Group:**  
 A group of users that can receive permissions on the file or directory according to the group permission bits.
 
-Task 2: Basic chown Operations
+---
 
-Create the File
+## Task 2: Basic chown Operations
 
+### Created the File
+
+```bash
 touch devops-file.txt
+```
 
-Check Current Ownership
+### Checked Ownership
 
+```bash
 ls -l devops-file.txt
+```
 
-Initial Ownership
+### Initial Ownership
 
+```text
 -rw-r--r-- 1 root root 0 devops-file.txt
+```
 
-Change Owner to tokyo
+### Changed Owner to tokyo
 
+```bash
 chown tokyo devops-file.txt
+```
 
-Result
+### Result
 
+```text
 -rw-r--r-- 1 tokyo root 0 devops-file.txt
+```
 
-Change Owner to berlin
+### Changed Owner to berlin
 
+```bash
 chown berlin devops-file.txt
+```
 
-Result
+### Result
 
+```text
 -rw-r--r-- 1 berlin root 0 devops-file.txt
+```
 
-Conclusion
+### Conclusion
 
-chown is used to change the owner of a file or directory.
+`chown` is used to change the owner of a file or directory.
 
-Task 3: Basic chgrp Operations
+---
 
-Create File
+## Task 3: Basic chgrp Operations
 
+### Created File
+
+```bash
 touch team-notes.txt
+```
 
-Create Group
+### Created Group
 
+```bash
 groupadd heist-team
+```
 
-Change Group Ownership
+### Changed Group Ownership
 
+```bash
 chgrp heist-team team-notes.txt
+```
 
-Verify
+### Verified
 
+```bash
 ls -l team-notes.txt
+```
 
-Result
+### Result
 
+```text
 -rw-r--r-- 1 root heist-team 0 team-notes.txt
+```
 
-Conclusion
+### Conclusion
 
-chgrp is used to change the group ownership of a file or directory.
+`chgrp` is used to change the group ownership of a file or directory.
 
-Task 4: Combined Owner & Group Change
+---
 
-Create File
+## Task 4: Combined Owner & Group Change
 
+### Created File
+
+```bash
 touch project-config.yaml
+```
 
-Change Owner and Group
+### Changed Both Owner and Group
 
+```bash
 chown professor:heist-team project-config.yaml
+```
 
-Result
+### Result
 
+```text
 -rw-r--r-- 1 professor heist-team 0 project-config.yaml
+```
 
-Create Directory
+### Created Directory
 
+```bash
 mkdir -p app-logs/
+```
 
-Change Owner and Group
+### Changed Owner and Group
 
+```bash
 chown berlin:heist-team app-logs
+```
 
-Result
+### Result
 
+```text
 drwxr-xr-x 2 berlin heist-team app-logs
+```
 
-Conclusion
+### Syntax
 
-The syntax:
-
+```bash
 chown user:group file
+```
 
-changes both the owner and group at the same time.
+This changes both the owner and group at the same time.
 
-Task 5: Recursive Ownership
+---
 
-Create Directory Structure
+## Task 5: Recursive Ownership
 
+### Created Directory Structure
+
+```bash
 mkdir -p heist-project/vault
 mkdir -p heist-project/plans
-
 touch heist-project/vault/gold.txt
 touch heist-project/plans/strategy.conf
+```
 
-Create Group
+### Created Group
 
+```bash
 groupadd planners
+```
 
-Apply Ownership Recursively
+### Applied Ownership Recursively
 
+```bash
 chown -R professor:planners heist-project/
+```
 
-Verify
+### Verified
 
+```bash
 ls -lR heist-project/
+```
 
-Result
+### Result
 
+```text
 heist-project:
 drwxr-xr-x 2 professor planners plans
 drwxr-xr-x 2 professor planners vault
@@ -165,58 +224,65 @@ heist-project/plans:
 
 heist-project/vault:
 -rw-r--r-- 1 professor planners gold.txt
+```
 
-Conclusion
+### Conclusion
 
-The -R option performs the ownership change recursively on the directory and everything inside it.
+The `-R` option performs the ownership change recursively on the directory and everything inside it.
 
-Task 6: Practice Challenge
+---
 
-Create User
+## Task 6: Practice Challenge
 
+### Created Users and Groups
+
+```bash
 useradd nairobi
-
-Create Groups
-
 groupadd vault-team
 groupadd tech-team
+```
 
-Create Directory
+### Created Directory
 
+```bash
 mkdir -p bank-heist/
+```
 
-Create Files
+### Created Files
 
+```bash
 touch bank-heist/access-codes.txt
 touch bank-heist/blueprints.pdf
 touch bank-heist/escape-plan.txt
+```
 
-Set Different Ownership
+### Set Different Ownership
 
-Access Codes:
-
+```bash
 chown tokyo:vault-team bank-heist/access-codes.txt
-
-Blueprints:
-
 chown berlin:tech-team bank-heist/blueprints.pdf
-
-Escape Plan:
-
 chown nairobi:vault-team bank-heist/escape-plan.txt
+```
 
-Verify Ownership
+### Verified
 
+```bash
 ls -l bank-heist/
+```
 
-Result
+### Result
 
+```text
 -rw-r--r-- 1 tokyo   vault-team 0 access-codes.txt
 -rw-r--r-- 1 berlin  tech-team  0 blueprints.pdf
 -rw-r--r-- 1 nairobi vault-team 0 escape-plan.txt
+```
 
-Commands Used
+---
 
+## Commands Used
+
+```bash
 ls -l
 touch
 useradd
@@ -227,45 +293,69 @@ chgrp
 mkdir
 chown -R
 ls -lR
+```
 
-Key Commands
+---
 
-Change Owner
+## Key Commands
 
+### Change Owner
+
+```bash
 chown user file
+```
 
-Change Group
+### Change Group
 
+```bash
 chgrp group file
+```
 
-Change Owner and Group
+### Change Owner and Group
 
+```bash
 chown user:group file
+```
 
-Recursive Ownership Change
+### Recursive Ownership Change
 
+```bash
 chown -R user:group directory/
+```
 
-What I Learned
+---
 
-Linux files and directories have an owner and a group owner.
+## What I Learned
 
-chown changes file ownership, while chgrp changes group ownership.
+1. Linux files and directories have an owner and a group owner.
+2. `chown` changes file ownership, while `chgrp` changes group ownership.
+3. `chown -R` can change ownership recursively for an entire directory structure.
 
-chown -R can change ownership recursively for an entire directory structure.
+---
 
-DevOps Relevance
+## DevOps Relevance
 
 File ownership is important in real-world DevOps for:
 
-Application deployments
+- Application deployments
+- Shared team directories
+- Web server files
+- Log files
+- CI/CD artifacts
+- Docker and container environments
 
-Shared team directories
+---
 
-Web server files
+## Day 11 Status
 
-Log file management
+**Completed ✅**
 
-CI/CD artifacts
+I practiced:
 
-Docker and container environments
+- File ownership
+- Group ownership
+- `chown`
+- `chgrp`
+- Combined ownership changes
+- Recursive ownership changes
+- Different ownership for multiple files

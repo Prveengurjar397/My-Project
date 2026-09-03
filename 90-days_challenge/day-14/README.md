@@ -1,6 +1,6 @@
 # Day 14 – Networking Fundamentals & Hands-on Checks
 
-## Task
+## Task 
 Get comfortable with core networking concepts and the commands you’ll actually run during troubleshooting.
 
 You will:

@@ -280,6 +280,29 @@ ls -l bank-heist/
 
 ---
 
+## Ownership Changes Summary (Before → After)
+
+| File / Directory | Before (`Owner:Group`) | After (`Owner:Group`) | Command Used |
+| :--- | :--- | :--- | :--- |
+| **`devops-file.txt`** | `root:root` | `berlin:root` | `chown tokyo` → `chown berlin` |
+| **`team-notes.txt`** | `root:root` | `root:heist-team` | `chgrp heist-team team-notes.txt` |
+| **`project-config.yaml`** | `root:root` | `professor:heist-team` | `chown professor:heist-team project-config.yaml` |
+| **`app-logs/`** | `root:root` | `berlin:heist-team` | `chown berlin:heist-team app-logs` |
+| **`heist-project/`** *(Recursive)* | `root:root` | `professor:planners` | `chown -R professor:planners heist-project/` |
+| **`bank-heist/access-codes.txt`** | `root:root` | `tokyo:vault-team` | `chown tokyo:vault-team bank-heist/access-codes.txt` |
+| **`bank-heist/blueprints.pdf`** | `root:root` | `berlin:tech-team` | `chown berlin:tech-team bank-heist/blueprints.pdf` |
+| **`bank-heist/escape-plan.txt`** | `root:root` | `nairobi:vault-team` | `chown nairobi:vault-team bank-heist/escape-plan.txt` |
+
+---
+
+## Troubleshooting & Key Rules (From Re-Practice)
+
+- **`chown` vs `chmod`:** `chown` changes ownership (`user:group`), whereas `chmod` changes permissions (`rwx`). Passing `user:group` to `chmod` throws an `invalid mode` error.
+- **Non-Recursive vs Recursive (`-R`):** Running `chown user:group dir/` without `-R` only updates the parent directory itself; adding `-R` updates all nested subdirectories and files.
+- **User/Group Prerequisites:** Both the target user and group must exist in `/etc/passwd` and `/etc/group` before running `chown` or `chgrp`.
+
+---
+
 ## Commands Used
 
 ```bash
@@ -330,6 +353,7 @@ chown -R user:group directory/
 1. Linux files and directories have an owner and a group owner.
 2. `chown` changes file ownership, while `chgrp` changes group ownership.
 3. `chown -R` can change ownership recursively for an entire directory structure.
+4. Target users and groups must exist before assigning ownership, and `sudo` is required for ownership transfers.
 
 ---
 
@@ -359,3 +383,5 @@ I practiced:
 - Combined ownership changes
 - Recursive ownership changes
 - Different ownership for multiple files
+
+#90DaysOfDevOps #DevOpsKaJosh #TrainWithShubham

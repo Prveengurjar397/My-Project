@@ -138,6 +138,17 @@ I observed different events such as:
 - Systemd service events
 - Previous boot logs
 
+### Additional Re-Practice (Nginx Logs, `-f`, and `--no-pager`)
+
+Also checked Nginx service logs and practiced live log monitoring:
+
+```bash
+journalctl -u nginx --no-pager
+journalctl -u nginx -f   # Exited live follow mode using Ctrl + C
+```
+
+- **What `--no-pager` does:** Prevents `journalctl` from opening inside the `less` pager, prints full untruncated log lines directly on the terminal, and avoids needing to manually press `q` to exit.
+
 ### My Current Understanding
 
 I understand how to view service logs using `journalctl`.
@@ -246,6 +257,12 @@ Example:
 sudo chown tokyo:devops revision.txt
 ```
 
+For changing ownership recursively across a directory and all its contents:
+
+```bash
+sudo chown -R owner_name:group_name directory_name/
+```
+
 ---
 
 # 6. Mini Self-Check
@@ -258,11 +275,11 @@ It helps me quickly check the status and details of a service.
 
 ### 2. `journalctl`
 
-It helps me view service/system logs and investigate problems.
+It helps me view service/system logs and investigate problems fast.
 
-### 3. `ls -l`
+### 3. `ls -l` (along with `chown user:group` & `Tab` completion)
 
-It helps me understand file permissions, ownership and groups.
+`ls -l` helps me understand file permissions, ownership and groups, while `chown user:group` saves time by updating both owner and group in a single command.
 
 ---
 
@@ -280,11 +297,7 @@ For detailed information:
 systemctl status ssh
 ```
 
-I can also check the processes related to the service:
-
-```bash
-ps
-```
+I can also check the processes related to the service using `ps`, `top`, or `htop`, and inspect recent logs using `journalctl -u <service> --no-pager`.
 
 `systemctl is-enabled` can be used when I specifically want to check whether a service is enabled to start automatically.
 
@@ -304,6 +317,8 @@ Example:
 
 ```bash
 sudo chown tokyo:devops revision.txt
+# Or recursively for a directory:
+sudo chown -R owner_name:group_name directory_name/
 ```
 
 And verify:
@@ -331,24 +346,24 @@ ls -l revision.txt
 During the next 3 days, I will focus on:
 
 1. Becoming more confident with Linux.
-2. Improving troubleshooting skills.
-3. Understanding logs and identifying problems from them.
-4. Learning the basics of Shell Scripting.
-5. Improving my practical skills.
-6. Taking another step toward my SRE/DevOps career goal.
+2. Improving real-world problem-solving and troubleshooting skills.
+3. Understanding logs deeply and identifying root-cause problems from them.
+4. Saving logs into files and archiving/compressing them using `tar` and `gzip` (`.gz`).
+5. Learning the basics of Shell Scripting.
+6. Improving my practical skills and taking another step toward my SRE/DevOps career goal.
 
 ---
 
 # 7. Key Takeaways
 
-- `ps` helps me inspect running processes.
+- `ps` helps me inspect running processes (`top` / `htop` for live monitoring).
 - `systemctl status` provides detailed service information.
 - `systemctl is-active` checks whether a service is currently active.
 - `systemctl is-enabled` checks whether a service is enabled.
-- `journalctl -u <service>` shows logs for a specific service.
+- `journalctl -u <service>` shows logs for a specific service (`-f` for live logs, `--no-pager` for full untruncated output).
 - `ls -l` shows file permissions, owner and group.
 - `chmod` changes file permissions.
-- `chown` changes file ownership.
+- `chown` changes file ownership (`chown -R user:group` for recursive directory updates).
 - `id` shows user and group information.
 
 ---
@@ -369,12 +384,27 @@ I will improve this through more hands-on practice.
 
 ---
 
-# 9. Day 12 Summary
+# 9. Incomplete / Pending Tasks & Revision Backlog
+
+These are the specific areas from Days 01–11 that I need to revisit, revise deeply, and master next:
+
+- [ ] **SSH Connection Revision & Improvement:** Re-practice SSH key generation (`ssh-keygen`), `authorized_keys` configuration, strict key permissions (`chmod 700 ~/.ssh` & `chmod 600 ~/.ssh/authorized_keys`), and connecting smoothly between local and remote/cloud environments.
+- [ ] **Deep Log Reading & Analysis (Most Important Revision):** Practice reading `/var/log/*` and `journalctl` outputs line-by-line, understanding timestamps, service lifecycle messages, warning vs. critical error levels (`-p err`), and tracing real failures.
+- [ ] **Log Extraction & Archiving (`tar` & `.gz`):** Practice exporting service logs to files and compressing them using `tar -czvf` for backup and incident reporting.
+
+---
+
+# 10. Day 12 Summary
 
 Day 12 was a revision day.
 
 I revised processes, services, logs, file permissions, users, groups and ownership.
 
-I also identified the areas where I need more practice, especially log analysis, troubleshooting and Shell Scripting.
+I also identified the areas where I need more practice—especially **log analysis, SSH connection workflows, troubleshooting, and Shell Scripting**—and documented them in my revision backlog.
+
 
 My focus is to keep building practical Linux skills and move step-by-step toward becoming a **SRE / DevOps Engineer**.
+
+**Day 12 – Completed ✅**
+
+#90DaysOfDevOps #DevOpsKaJosh #TrainWithShubham

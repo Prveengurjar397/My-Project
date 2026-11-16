@@ -1,4 +1,3 @@
-cat << 'EOF' > day-09-user-management.md
 # Day 09 – Linux User & Group Management Challenge
 
 ## Task
@@ -236,4 +235,3 @@ Day 09 Linux User & Group Management Challenge completed and verified successful
 **Day 09 – Completed ✅**
 
 #90DaysOfDevOps #DevOpsKaJosh #TrainWithShubham
-EOF

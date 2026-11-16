@@ -1,57 +1,72 @@
-**Day 09 – Linux User & Group Management Challenge**
+# Day 09 – Linux User & Group Management Challenge
 
-Task
-Today's goal is to practice user and group management by completing hands-on challenges.
+## 🎯 Objective
+Today's goal is to practice Linux user and group management by completing hands-on challenges.
 
-Figure out how to:
+**Key Focus Areas:**
+- Create users and set secure passwords
+- Create groups and assign user memberships
+- Set up shared directories with proper group ownership and permissions (`775`)
+- Apply troubleshooting fundamentals from Days 1–7 to diagnose access issues
 
-Create users and set passwords
-Create groups and assign users
-Set up shared directories with group permissions
-Use what you learned from Days 1-7 to find the right commands!
+---
 
+## 📦 Expected Deliverables
+- 📄 A detailed markdown documentation file: [`day-09-user-management.md`](./day-09-user-management.md)
+- 📸 Screenshots of terminal command outputs
+- 💻 Complete list of Linux commands practiced
 
-Expected Output
-A markdown file: day-09-user-management.md
-Screenshots of command outputs
-List of commands used
+---
 
+## 🛠️ Challenge Tasks
 
-**Challenge Tasks**
-Task 1: Create Users (20 minutes)
-Create three users with home directories and passwords:
+### Task 1: Create Users *(20 mins)*
+- Create three users with home directories (`-m`) and passwords:
+  - `tokyo`
+  - `berlin`
+  - `professor`
+- **Verify:** Inspect `/etc/passwd` and `/home/` directory.
 
-tokyo
-berlin
-professor
-Verify: Check /etc/passwd and /home/ directory
+---
 
-Task 2: Create Groups (10 minutes)
-Create two groups:
+### Task 2: Create Groups *(10 mins)*
+- Create two primary team groups:
+  - `developers`
+  - `admins`
+- **Verify:** Inspect `/etc/group`.
 
-developers
-admins
-Verify: Check /etc/group
+---
 
-Task 3: Assign to Groups (15 minutes)
-Assign users:
+### Task 3: Assign Users to Groups *(15 mins)*
 
-tokyo → developers
-berlin → developers + admins (both groups)
-professor → admins
-Verify: Use appropriate command to check group membership
+| User | Assigned Group(s) |
+| :--- | :--- |
+| **`tokyo`** | `developers` |
+| **`berlin`** | `developers`, `admins` *(both groups)* |
+| **`professor`** | `admins` |
 
-Task 4: Shared Directory (20 minutes)
-Create directory: /opt/dev-project
-Set group owner to developers
-Set permissions to 775 (rwxrwxr-x)
-Test by creating files as tokyo and berlin
-Verify: Check permissions and test file creation
+- **Verify:** Check group membership using `id` or `groups`.
 
-Task 5: Team Workspace (20 minutes)
-Create user nairobi with home directory
-Create group project-team
-Add nairobi and tokyo to project-team
-Create /opt/team-workspace directory
-Set group to project-team, permissions to 775
-Test by creating file as nairobi
+---
+
+### Task 4: Shared Project Directory *(20 mins)*
+- Create directory: `/opt/dev-project`
+- Set group owner to `developers`
+- Set permissions to `775` (`rwxrwxr-x`)
+- **Test & Verify:** Create test files as `tokyo` and `berlin`, and verify directory permissions.
+
+---
+
+### Task 5: Team Workspace *(20 mins)*
+- Create user `nairobi` with a home directory
+- Create group `project-team`
+- Add `nairobi` and `tokyo` to `project-team`
+- Create directory: `/opt/team-workspace`
+- Set group owner to `project-team` and permissions to `775` (`rwxrwxr-x`)
+- **Test & Verify:** Create a test file as `nairobi` and confirm access.
+
+---
+
+## 🔗 Solution & Documentation
+👉 Check out the complete step-by-step commands, outputs, and troubleshooting notes in **[day-09-user-management.md](./updated-user-management.md)**.
+

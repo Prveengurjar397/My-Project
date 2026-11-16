@@ -68,6 +68,7 @@ systemd helps DevOps engineers start, stop, restart and troubleshoot services.
 | `journalctl` | View system and service logs      |
 | `kill`       | Send a signal to a process        |
 
+
 ## Key Takeaway
 
 Linux architecture is based on the interaction between user space, the kernel and system services. Understanding processes and systemd is important for troubleshooting and managing production Linux servers.

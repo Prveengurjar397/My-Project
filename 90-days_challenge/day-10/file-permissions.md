@@ -76,10 +76,11 @@ aapka swagat h devops jaurny me
 cat notes.txt
 ```
 
-### View `script.sh`
+### View `script.sh` (Normal & Read-Only Mode)
 
 ```bash
 vim script.sh
+vim -R script.sh    # Opened in read-only mode (exited without saving via Esc + :q!)
 ```
 
 ### Display first 5 lines of `/etc/passwd`
@@ -121,9 +122,12 @@ Owner | Group | Others
 ### Permission examples
 
 ```text
+400 = r--------
+444 = r--r--r--
 644 = rw-r--r--
 640 = rw-r-----
 744 = rwxr--r--
+764 = rwxrw-r--
 755 = rwxr-xr-x
 ```
 
@@ -133,12 +137,13 @@ Owner | Group | Others
 
 ### `devops.txt`
 
-Initially the file had normal permissions.
+Initially the file had normal permissions (`644`).
 
-Changed it to read-only:
+Changed it to read-only (`400` / `444`):
 
 ```bash
 chmod 400 devops.txt
+# Also practiced: chmod 444 devops.txt
 ```
 
 Verified:
@@ -207,6 +212,7 @@ Added execute permission:
 
 ```bash
 chmod 744 script.sh
+# Also tested: chmod 764 script.sh
 ```
 
 Then executed:
@@ -279,11 +285,21 @@ chmod +x script.sh
 
 ---
 
-### Test 2 – Read-Only File
+### Test 2 – Read-Only File & Root Bypass Behavior
 
-A read-only file was tested by removing write permission.
+A read-only file (`444` / `400`) was tested by removing write permission:
 
-The purpose was to understand how Linux prevents normal users from modifying files without write permission.
+```bash
+sudo -u ubuntu bash -c 'echo "test" >> /root/practice/devops.txt'
+```
+
+Result:
+
+```text
+bash: /root/practice/devops.txt: Permission denied
+```
+
+This confirmed how Linux prevents non-root users from modifying files without write (`w`) permission, whereas the `root` superuser bypasses standard read-only file bits.
 
 ---
 
@@ -305,6 +321,14 @@ This is different from:
 
 ---
 
+## Troubleshooting & Extra Learnings (From Re-Practice)
+
+- **Read-Only Vim (`vim -R` & `:q!`):** Practiced opening a read-only file via `vim -R script.sh` and force-quitting without saving changes using `Esc` followed by `:q!`.
+- **Command Syntax (`head` vs `cat`):** Fixed `cat /etc/passwd head -n 5` (`No such file or directory`) by passing the file path directly to `head -n 5 /etc/passwd`.
+- **Exiting Follow Mode (`tail -f`):** Used `Ctrl + C` (`^C`) to exit `tail -f` live monitoring mode cleanly.
+
+---
+
 ## Commands Used
 
 ```bash
@@ -312,6 +336,7 @@ touch
 cat
 echo
 vim
+vim -R
 head
 tail
 ls
@@ -319,6 +344,7 @@ chmod
 mkdir
 ./script.sh
 bash script.sh
+sudo -u
 ```
 
 ---
@@ -327,8 +353,10 @@ bash script.sh
 
 ```bash
 chmod 400 devops.txt
+chmod 444 devops.txt
 chmod 640 notes.txt
 chmod 744 script.sh
+chmod 764 script.sh
 chmod 755 project
 chmod +x script.sh
 chmod 644 script.sh
@@ -339,11 +367,12 @@ chmod 644 script.sh
 ## What I Learned
 
 1. Linux uses `r`, `w`, and `x` permissions for files and directories.
-2. `chmod` is used to modify file and directory permissions.
-3. A script needs execute permission to run directly using `./script.sh`.
-4. `cat` can read a file when the user has read permission.
+2. `chmod` is used to modify file and directory permissions using numeric or symbolic modes.
+3. A script needs execute (`x`) permission to run directly using `./script.sh`.
+4. `cat` can read a file when the user has read (`r`) permission.
 5. `bash script.sh` can execute a readable shell script without giving the script itself execute permission.
-6. Numeric permissions such as `640`, `744`, and `755` represent different combinations of read, write, and execute permissions.
+6. Non-root users get `Permission denied` when writing to read-only (`444` / `400`) files, while `root` bypasses read-only restrictions.
+7. Numeric permissions such as `640`, `744`, `764`, and `755` represent different combinations of read, write, and execute permissions.
 
 ---
 
@@ -352,7 +381,7 @@ chmod 644 script.sh
 Day 10 – File Permissions & File Operations Challenge completed successfully.
 
 - Files created ✅
-- Files read using `cat` ✅
+- Files read using `cat` and `vim -R` ✅
 - `head` and `tail` practiced ✅
 - File permissions modified using `chmod` ✅
 - Script execution tested ✅

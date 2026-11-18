@@ -1,3 +1,4 @@
+cat << 'EOF' > day-16-shell-scripting.md
 # Day 16 – Shell Scripting Basics
 
 ## 📅 Day 16
@@ -61,7 +62,8 @@ Hello, DevOps!
 
 ### What I learned
 
-`#!/bin/bash` specifies Bash as the interpreter for the script.
+- `#!/bin/bash` specifies Bash as the interpreter for the script.
+- **What happens if you remove the shebang?** Without `#!/bin/bash`, Linux does not know whether to execute the script with `bash`, `sh`, `zsh`, or `csh` when run via `./hello.sh`, falling back to the default shell (`/bin/sh`), which can break Bash-specific syntax.
 
 ---
 
@@ -293,7 +295,6 @@ elif [ "$check" = "n" ] || [ "$check" = "N" ]; then
 else
     echo "Invalid input! Please enter y or n."
 fi
-
 ```
 
 ### Example
@@ -403,12 +404,26 @@ echo "Skipped."
 
 ### 4. Incorrect command substitution
 
-I learned that `$()` is used for command substitution.
+I learned that `$()` is used for command substitution when storing output in a variable, whereas commands like `systemctl status "$SERVICE"` should be called directly without `$()`.
 
 Example:
 
 ```bash
 status=$(systemctl is-active "$services_name")
+```
+
+### 5. Extra `-eq` in File Check (`-f`)
+
+Wrong:
+
+```bash
+if [ -f -eq "$path" ]; then
+```
+
+Correct:
+
+```bash
+if [ -f "$path" ]; then
 ```
 
 ---
@@ -432,3 +447,6 @@ day-16-shell-scripting.md
 Today I practiced the basic building blocks of Bash scripting and learned how to create scripts that take user input, use variables, make decisions, check files, and check Linux service status.
 
 **Next:** Continue with advanced shell scripting concepts and more practical automation.
+
+#90DaysOfDevOps #DevOpsKaJosh #TrainWithShubham
+EOF

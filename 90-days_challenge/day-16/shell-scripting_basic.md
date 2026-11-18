@@ -1,4 +1,3 @@
-cat << 'EOF' > day-16-shell-scripting.md
 # Day 16 – Shell Scripting Basics
 
 ## 📅 Day 16
@@ -449,4 +448,4 @@ Today I practiced the basic building blocks of Bash scripting and learned how to
 **Next:** Continue with advanced shell scripting concepts and more practical automation.
 
 #90DaysOfDevOps #DevOpsKaJosh #TrainWithShubham
-EOF
+

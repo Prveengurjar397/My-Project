@@ -277,29 +277,23 @@ The script asks the user for a service name and asks whether they want to check 
 Example:
 
 ```bash
-services_name=""
+#!/bin/bash
+SERVICE="nginx"
+read -p "Do you want to check the status of $SERVICE? (y/n): " check
 
-read -p "Enter service name : " services_name
-
-value=""
-
-read -p "Do you want to check the status (y/n) : " value
-
-if [ "$value" = "y" ]; then
-    status=$(systemctl is-active "$services_name")
-
-    if [ "$status" = "active" ]; then
-        echo "Service $services_name is active"
+if [ "$check" = "y" ] || [ "$check" = "Y" ]; then
+    systemctl status "$SERVICE" --no-pager
+    if systemctl is-active --quiet "$SERVICE"; then
+        echo "Result: $SERVICE is ACTIVE and running."
     else
-        echo "Service $services_name is not active"
+        echo "Result: $SERVICE is NOT active."
     fi
-
-elif [ "$value" = "n" ]; then
+elif [ "$check" = "n" ] || [ "$check" = "N" ]; then
     echo "Skipped."
-
 else
-    echo "Invalid choice"
+    echo "Invalid input! Please enter y or n."
 fi
+
 ```
 
 ### Example

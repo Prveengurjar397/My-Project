@@ -279,16 +279,42 @@ Example:
 
 ```bash
 #!/bin/bash
-SERVICE="nginx"
-read -p "Do you want to check the status of $SERVICE? (y/n): " check
+
+read -p "Enter service or tool name (e.g., nginx, ssh, curl): " service
+read -p "Do you want to check/install $service? (y/n): " check
 
 if [ "$check" = "y" ] || [ "$check" = "Y" ]; then
-    systemctl status "$SERVICE" --no-pager
-    if systemctl is-active --quiet "$SERVICE"; then
-        echo "Result: $SERVICE is ACTIVE and running."
+    # 1. Check karein ki kya yeh pehle se ek systemd service hai
+    if systemctl cat "${service}.service" &> /dev/null; then
+        echo "$service is already installed as a systemd service."
+    # 2. Check karein ki kya yeh ek CLI command hai (jaise curl)
+    elif command -v "$service" &> /dev/null; then
+        echo "$service is a CLI tool (not a background service) and is already installed!"
+        exit 0
+    # 3. Agar dono nahi hain, toh silently install karne ki koshish karein
     else
-        echo "Result: $SERVICE is NOT active."
+        echo "Installing $service silently, please wait..."
+        if apt update &> /dev/null && apt install "$service" -y &> /dev/null; then
+            echo "$service installed successfully!"
+            systemctl enable --now "$service" &> /dev/null
+        else
+            echo "Error: Package '$service' not found in apt repository! Check spelling."
+            exit 1
+        fi
     fi
+
+    # 4. Ab check karein ki systemd service active hai ya nahi
+    if systemctl cat "${service}.service" &> /dev/null; then
+        systemctl status "$service" --no-pager
+        if systemctl is-active --quiet "$service"; then
+            echo "Result: $service is ACTIVE and running."
+        else
+            echo "Result: $service is NOT active."
+        fi
+    else
+        echo "Note: $service was installed as a CLI tool (no background systemd service)."
+    fi
+
 elif [ "$check" = "n" ] || [ "$check" = "N" ]; then
     echo "Skipped."
 else
@@ -448,4 +474,3 @@ Today I practiced the basic building blocks of Bash scripting and learned how to
 **Next:** Continue with advanced shell scripting concepts and more practical automation.
 
 #90DaysOfDevOps #DevOpsKaJosh #TrainWithShubham
-

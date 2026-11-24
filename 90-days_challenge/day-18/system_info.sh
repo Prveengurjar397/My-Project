@@ -1,87 +1,105 @@
-What is Strict Mode?
-Strict mode is commonly enabled using:
+## What is Strict Mode?
 
+Strict mode in Bash is commonly enabled using:
+
+```bash
 set -euo pipefail
+```
 
 It makes Bash scripts safer by:
 
-1. -e → stopping on command failure
-2. -u → detecting undefined variables
-3. pipefail → detecting failures inside pipelines
-
+1. **`-e`** → Stopping immediately when any command fails (non-zero exit status).
+2. **`-u`** → Detecting and throwing an error on undefined (unset) variables.
+3. **`-o pipefail`** → Detecting failures anywhere inside pipelines (`|`), not just the last command.
 
 ---
 
-### 2. `system-info.md`
-
-```markdown
 # System Info Reporter
 
-## Script: system_info.sh
+## Script: `system_info.sh`
 
 ```bash
 #!/bin/bash
-
 set -euo pipefail
 
-hostname_os() {
-    echo "====== HOSTNAME & OS ======"
-    hostname
-    grep PRETTY_NAME /etc/os-release
+get_os_info() {
+    echo "Hostname : $(hostname)"
+    echo "OS Info  : $(grep '^PRETTY_NAME=' /etc/os-release | cut -d '"' -f 2)"
+    echo "Kernel   : $(uname -r)"
 }
 
-uptime_info() {
-    echo "==== UPTIME ===="
-    uptime
+get_uptime() {
+    echo "Uptime   : $(uptime -p)"
 }
 
-disk_usage() {
-    echo "==== DISK USAGE ===="
-    df -h /
+get_disk_usage() {
+    df -h --output=source,size,used,avail,pcent,target | grep -v '^tmpfs\|^udev' | head -n 1
+    df -h --output=source,size,used,avail,pcent,target | grep -v '^tmpfs\|^udev' | tail -n +2 | sort -k2 -hr | head -n 5
 }
 
-memory_usage() {
-    echo "==== MEMORY USAGE ===="
-    free -h
+get_memory_usage() {
+    free -h | awk 'NR==2 {print "Total: " $2 " | Used: " $3 " | Free: " $4 " | Available: " $7}'
 }
 
-top_cpu() {
-    echo "==== TOP 5 CPU PROCESSES ===="
-    ps aux --sort=-%cpu | head -6
+get_top_cpu() {
+    ps -eo pid,user,%cpu,%mem,comm --sort=-%cpu | head -n 6
 }
 
 main() {
-    hostname_os
-    uptime_info
-    disk_usage
-    memory_usage
-    top_cpu
+    echo "=========================================="
+    echo "         SYSTEM INFO REPORTER             "
+    echo "=========================================="
+
+    echo -e "\n--- 1. Hostname & OS Info ---"
+    get_os_info
+
+    echo -e "\n--- 2. System Uptime ---"
+    get_uptime
+
+    echo -e "\n--- 3. Top 5 Disk Usage (by Size) ---"
+    get_disk_usage
+
+    echo -e "\n--- 4. Memory Usage ---"
+    get_memory_usage
+
+    echo -e "\n--- 5. Top 5 CPU-Consuming Processes ---"
+    get_top_cpu
+
+    echo -e "\n=========================================="
 }
 
 main
+```
 
-**OUTPUT**
+## Sample Output
 
-====== HOSTNAME & OS ======
-ubuntu
-PRETTY_NAME="Ubuntu 24.04.4 LTS"
+```text
+==========================================
+         SYSTEM INFO REPORTER             
+==========================================
 
-==== UPTIME ====
-09:24:35 up 35 min, 0 user, load average: 0.00, 0.00, 0.00
+--- 1. Hostname & OS Info ---
+Hostname : ubuntu
+OS Info  : Ubuntu 24.04.4 LTS
+Kernel   : 6.8.0-45-generic
 
-==== DISK USAGE ====
+--- 2. System Uptime ---
+Uptime   : up 35 minutes
+
+--- 3. Top 5 Disk Usage (by Size) ---
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/vda1        19G  5.4G   13G  30% /
 
-==== MEMORY USAGE ====
-               total        used        free      shared  buff/cache   available
-Mem:           1.9Gi       463Mi       780Mi       1.1Mi       827Mi       1.4Gi
-Swap:          1.0Gi          0B       1.0Gi
+--- 4. Memory Usage ---
+Total: 1.9Gi | Used: 463Mi | Free: 780Mi | Available: 1.4Gi
 
-==== TOP 5 CPU PROCESSES ====
-USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root        1288  0.2  0.6 1231484 13488 ?       S<l  08:49   0:04 /bin/runtime-info-service
-root        1279  0.2  2.7 1243552 54464 ?       SNl  08:49   0:04 /opt/theia/node
-root        1245  0.1  5.1 11761092 100108 ?     SNl  08:49   0:03 /opt/theia/node
-root           1  0.1  0.6  22104 13344 ?        Ss   08:48   0:02 /sbin/init
-root         642  0.0  2.3 1792760 46544 ?       Ssl  08:48   0:01 /usr/bin/containerd
+--- 5. Top 5 CPU-Consuming Processes ---
+    PID USER     %CPU %MEM COMMAND
+   1288 root      0.2  0.6 runtime-info-se
+   1279 root      0.2  2.7 node
+   1245 root      0.1  5.1 node
+      1 root      0.1  0.6 init
+    642 root      0.0  2.3 containerd
+
+==========================================
+```

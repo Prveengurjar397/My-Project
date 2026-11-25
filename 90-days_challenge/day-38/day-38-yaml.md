@@ -1,4 +1,3 @@
-cat << 'EOF' > day-38-yaml.md
 # Day 38 – YAML Basics & Production Debugging Guide (`#90DaysOfDevOps`)
 
 > **Overview:** Complete hands-on YAML configurations (`person.yaml` & `server.yaml`), **lint-free CLI debugging techniques** (using Linux & Python), real terminal error logs, and a **5-day pre-interview revision cheatsheet**.
@@ -16,7 +15,7 @@ cat << 'EOF' > day-38-yaml.md
 8. [Interview Quick-Revision Cheatsheet (Read 5 Days Before Interview)](#interview-quick-revision-cheatsheet)
 
 ---
-
+  
 ## Task 1 & 2: `person.yaml` (Key-Value Pairs & Lists)
 
 **File: `person.yaml`**
@@ -182,4 +181,4 @@ tools:
 * **Booleans vs Strings:** `true` / `false` / `yes` / `no` are parsed as booleans; wrap them in quotes (`"true"`) if a tool requires a literal string.
 * **Special Characters:** Always quote strings containing colons (`: `) or hashes (`#`) so YAML does not treat them as key-value separators or comments.
 * **Document Markers:** `---` marks the start of a YAML document (used to separate multiple Kubernetes manifests in one file), and `...` marks the end.
-EOF
+  

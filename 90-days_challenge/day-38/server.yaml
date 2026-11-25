@@ -1,0 +1,19 @@
+```
+---
+server:
+  name: ubuntu-latest
+  ip: 197.195.0.0
+  port: 3000
+
+database:
+  host: http://localhost:3001
+  name: postgres
+  credentials:
+    user: praveen
+    password: secreate@123
+
+startup_script: |
+  pwd
+  cat /var/log/error.txt
+  find . -name "*.log"
+```
